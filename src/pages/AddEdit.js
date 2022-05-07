@@ -36,7 +36,6 @@ export default function AddEdit() {
 			setState({ ...initialState });
 		}
 	}, [id, issues]);
-
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setState({ ...state, [name]: value });
