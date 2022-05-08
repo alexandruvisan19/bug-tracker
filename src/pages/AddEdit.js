@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./AddEdit.css";
 import db from "../firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -24,8 +24,10 @@ export default function AddEdit() {
 
 	useEffect(() => {
 		let getIssues = async () => {
+			let issueArr = [];
 			const data = await getDocs(issueCollectionRef);
-			setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+			issueArr.push(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+			setData(issueArr);
 		};
 		getIssues();
 	}, [id]);
@@ -53,11 +55,21 @@ export default function AddEdit() {
 		if (!title || !issueDescription || !solvedDescription || !webmasterName || !date || !tagName || !market) {
 			toast.error("Please provide a value in each input field");
 		} else {
-			const { error } = await addDoc(issueCollectionRef, state);
-			if (error) {
-				toast.error(error);
+			if (id) {
+				try {
+					const issueDoc = doc(db, "issues", id);
+					await updateDoc(issueDoc, state);
+					toast.success("Issue updated succesfully");
+				} catch (err) {
+					toast.error(err);
+				}
 			} else {
-				toast.success("Issue added succesfully");
+				const { error } = await addDoc(issueCollectionRef, state);
+				if (error) {
+					toast.error(error);
+				} else {
+					toast.success("Issue added succesfully");
+				}
 			}
 			setTimeout(() => navigate("/"), 500);
 		}
