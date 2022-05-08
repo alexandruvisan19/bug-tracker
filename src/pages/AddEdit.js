@@ -23,10 +23,11 @@ export default function AddEdit() {
 	const { id } = useParams();
 
 	useEffect(() => {
-		(async () => {
+		let getIssues = async () => {
 			const data = await getDocs(issueCollectionRef);
 			setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-		})();
+		};
+		getIssues();
 	}, [id]);
 
 	useEffect(() => {
@@ -35,7 +36,12 @@ export default function AddEdit() {
 		} else {
 			setState({ ...initialState });
 		}
+
+		return () => {
+			setState({ ...initialState });
+		};
 	}, [id, issues]);
+
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setState({ ...state, [name]: value });
@@ -48,7 +54,6 @@ export default function AddEdit() {
 			toast.error("Please provide a value in each input field");
 		} else {
 			const { error } = await addDoc(issueCollectionRef, state);
-			console.log(error);
 			if (error) {
 				toast.error(error);
 			} else {

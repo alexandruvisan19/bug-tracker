@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import db from "../firebase";
 import { doc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
@@ -9,17 +9,16 @@ function Home() {
 	const issuesCollectionRef = collection(db, "issues");
 
 	useEffect(() => {
-		const getIssues = async () => {
+		(async () => {
 			const data = await getDocs(issuesCollectionRef);
 			setIssues(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-		};
+		})();
+	}, []);
 
-		getIssues();
-	}, [issuesCollectionRef]);
-
-	const onDelete = async (id) => {
+	const onDelete = (id) => {
 		if (window.confirm("Are you sure you want to delete this issue?")) {
-			await deleteDoc(doc(issuesCollectionRef, id));
+			deleteDoc(doc(issuesCollectionRef, id));
+			setIssues(issues.filter((issue) => issue.id !== id));
 		}
 	};
 
