@@ -26,11 +26,20 @@ table {
 	border-left: 1px solid #000;
 	border-right: 1px solid #000;
 	border-bottom: 1px solid #000;
-	max-width: 750px;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: 200px;
+}
+
+.styled-table td::-webkit-scrollbar {
+	height: 6px;
+}
+.styled-table td::-webkit-scrollbar-track {
+	background: #d6d6d6;
+}
+.styled-table td::-webkit-scrollbar-thumb {
+	background: #888;
+}
+.styled-table td::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
 
 .styled-table span {
