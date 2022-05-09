@@ -28,6 +28,9 @@ table {
 	border-bottom: 1px solid #000;
 	white-space: nowrap;
 }
+.styled-table th {
+	white-space: normal;
+}
 
 .styled-table td::-webkit-scrollbar {
 	height: 6px;
