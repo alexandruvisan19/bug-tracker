@@ -8,7 +8,9 @@ function Home(props) {
 	const [issues, setIssues] = useState([]);
 	const [selectedIssue, setSelectedIssue] = useState([]);
 	const issuesCollectionRef = collection(db, "issues");
+	const [order, setOrder] = useState("ASC");
 	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market, id } = selectedIssue;
+	console.log(issues);
 
 	useEffect(() => {
 		(async () => {
@@ -35,19 +37,46 @@ function Home(props) {
 		setSelectedIssue(...issues.filter((doc) => doc.id === id));
 	};
 
+	const sorting = (col) => {
+		if (order === "ASC") {
+			const sorted = [...issues.sort((a, b) => (a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1))];
+			setIssues(sorted);
+			setOrder("DES");
+		}
+		if (order === "DES") {
+			const sorted = [...issues.sort((a, b) => (a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1))];
+			setIssues(sorted);
+			setOrder("ASC");
+		}
+	};
+
 	return (
 		<div>
 			<table className="styled-table">
 				<thead>
 					<tr>
 						<th style={{ textAlign: "center" }}>No. #️⃣</th>
-						<th style={{ textAlign: "center" }}>Title Issue 🔖</th>
-						<th style={{ textAlign: "center" }}>Issue Description 📓</th>
-						<th style={{ textAlign: "center" }}>Solved Description ✅</th>
-						<th style={{ textAlign: "center" }}>Webmaster Name 🤓</th>
-						<th style={{ textAlign: "center" }}>Market 🔗</th>
-						<th style={{ textAlign: "center" }}>Date 📅</th>
-						<th style={{ textAlign: "center" }}>Tagname 🏷️</th>
+						<th onClick={() => sorting("title")} style={{ textAlign: "center" }}>
+							Issue 🔖 {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("issueDescription")} style={{ textAlign: "center" }}>
+							Issue Description 📓 {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("solvedDescription")} style={{ textAlign: "center" }}>
+							Solved Description ✅ {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("webmasterName")} style={{ textAlign: "center" }}>
+							Webmaster 🤓 {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("market")} style={{ textAlign: "center" }}>
+							Market 🔗 {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("date")} style={{ textAlign: "center" }}>
+							Date 📅 {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
+						<th onClick={() => sorting("tagName")} style={{ textAlign: "center" }}>
+							Tagname 🏷️ {order === "ASC" ? <span>↓</span> : <span>↑</span>}
+						</th>
 						<th style={{ textAlign: "center" }}>Action 🖐️</th>
 					</tr>
 				</thead>
@@ -55,8 +84,12 @@ function Home(props) {
 					{issues.map((issue, id) => {
 						return (
 							<tr key={issue.id}>
-								<th scope="row">{id + 1}</th>
-								<td>{issue.title}</td>
+								<th style={{ backgroundColor: "#4284F5", color: "white" }} scope="row">
+									{id + 1}
+								</th>
+								<td>
+									<h3>{issue.title}</h3>
+								</td>
 								<td>{issue.issueDescription}</td>
 								<td>{issue.solvedDescription}</td>
 								<td>{issue.webmasterName}</td>

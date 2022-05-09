@@ -179,7 +179,7 @@ export default function AddEdit() {
 					></textarea>
 				</div>
 
-				<input className="addUpdateBtn" type="submit" value={state.id ? "Update Issue" : "Add Issue"} />
+				<input className="addUpdateBtn" type="submit" value={id ? "Update Issue" : "Add Issue"} />
 				{(title || issueDescription || solvedDescription || webmasterName || date || tagName || market) && (
 					<button onClick={resetFields} className="cancelBtn" value="Cancel">
 						Cancel

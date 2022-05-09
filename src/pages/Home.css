@@ -20,11 +20,18 @@ table {
 
 .styled-table th,
 .styled-table td {
-	padding: 12px 15px;
+	padding: 6px 10px;
+	width: 80px;
 	white-space: inherit;
 	border-left: 1px solid #000;
 	border-right: 1px solid #000;
 	border-bottom: 1px solid #000;
+	max-width: 750px;
+}
+
+.styled-table span {
+	cursor: pointer;
+	padding: 5px;
 }
 
 .styled-table tbody tr {

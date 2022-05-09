@@ -9,4 +9,4 @@
 
 # Things to add
 1. search bar -> done
-2. sort by name, date
+2. sort by name, date -> done
