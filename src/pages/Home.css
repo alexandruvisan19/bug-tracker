@@ -27,6 +27,10 @@ table {
 	border-right: 1px solid #000;
 	border-bottom: 1px solid #000;
 	max-width: 750px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 200px;
 }
 
 .styled-table span {

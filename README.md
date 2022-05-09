@@ -5,7 +5,7 @@
 
 # Home Page
 
-1. Add view page as a popup
+1. Add view page as a popup -> done
 
 # Things to add
 1. search bar -> done

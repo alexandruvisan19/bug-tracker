@@ -9,8 +9,14 @@ function Home(props) {
 	const [selectedIssue, setSelectedIssue] = useState([]);
 	const issuesCollectionRef = collection(db, "issues");
 	const [order, setOrder] = useState("ASC");
+	const [showModal, setShowModal] = useState(false);
 	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market, id } = selectedIssue;
-	console.log(issues);
+
+	const openModal = (id) => {
+		setSelectedIssue(...issues.filter((doc) => doc.id === id));
+		props.setGetModalData(...issues.filter((doc) => doc.id === id));
+		props.setShowModal((prev) => !prev);
+	};
 
 	useEffect(() => {
 		(async () => {
@@ -31,10 +37,6 @@ function Home(props) {
 			deleteDoc(doc(issuesCollectionRef, id));
 			setIssues(issues.filter((issue) => issue.id !== id));
 		}
-	};
-
-	const onPopup = (id) => {
-		setSelectedIssue(...issues.filter((doc) => doc.id === id));
 	};
 
 	const sorting = (col) => {
@@ -84,7 +86,7 @@ function Home(props) {
 					{issues.map((issue, id) => {
 						return (
 							<tr key={issue.id}>
-								<th style={{ backgroundColor: "#4284F5", color: "white" }} scope="row">
+								<th style={{ backgroundColor: "#f3f3f3", color: "black" }} scope="row">
 									{id + 1}
 								</th>
 								<td>
@@ -107,7 +109,7 @@ function Home(props) {
 									<button className="btn btn-delete" onClick={() => onDelete(issue.id)}>
 										Delete
 									</button>
-									<button className="btn btn-view" onClick={() => onPopup(issue.id)}>
+									<button className="btn btn-view" onClick={() => openModal(issue.id)}>
 										View
 									</button>
 								</td>
@@ -116,27 +118,6 @@ function Home(props) {
 					})}
 				</tbody>
 			</table>
-			<div style={{ marginTop: "150px" }}>
-				<div className="card">
-					<div className="card-header">
-						<p>Issue Details</p>
-					</div>
-					<div className="container">
-						<strong>ID:</strong>
-						<span>{id || ""}</span>
-						<br />
-						<br />
-						<strong>title:</strong>
-						<span>{title || ""}</span>
-						<br />
-						<br />
-						<strong>Webmaster:</strong>
-						<span>{webmasterName || ""}</span>
-						<br />
-						<br />
-					</div>
-				</div>
-			</div>
 		</div>
 	);
 }
