@@ -6,13 +6,13 @@ import { collection, getDocs, addDoc, updateDoc, doc } from "firebase/firestore"
 import { toast } from "react-toastify";
 
 const initialState = {
-	title: "",
-	issueDescription: "",
-	solvedDescription: "",
-	webmasterName: "",
-	market: "",
-	date: "",
-	tagName: "",
+	title: null,
+	issueDescription: null,
+	solvedDescription: null,
+	webmasterName: null,
+	market: null,
+	date: null,
+	tagName: null,
 };
 
 export default function AddEdit() {
@@ -27,7 +27,7 @@ export default function AddEdit() {
 			let issueArr = [];
 			const data = await getDocs(issueCollectionRef);
 			issueArr.push(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-			setData(issueArr);
+			setData(...issueArr);
 		};
 		getIssues();
 	}, [id]);
@@ -73,6 +73,10 @@ export default function AddEdit() {
 			}
 			setTimeout(() => navigate("/"), 500);
 		}
+	};
+
+	const resetFields = () => {
+		setState(initialState);
 	};
 
 	return (
@@ -175,7 +179,12 @@ export default function AddEdit() {
 					></textarea>
 				</div>
 
-				<input type="submit" value={state.id ? "Update Issue" : "Add Issue"} />
+				<input className="addUpdateBtn" type="submit" value={state.id ? "Update Issue" : "Add Issue"} />
+				{(title || issueDescription || solvedDescription || webmasterName || date || tagName || market) && (
+					<button onClick={resetFields} className="cancelBtn" value="Cancel">
+						Cancel
+					</button>
+				)}
 			</form>
 		</div>
 	);

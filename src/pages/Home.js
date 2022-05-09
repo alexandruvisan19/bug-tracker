@@ -1,25 +1,38 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import db from "../firebase";
 import { doc, collection, getDocs, deleteDoc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./Home.css";
 
-function Home() {
+function Home(props) {
 	const [issues, setIssues] = useState([]);
+	const [selectedIssue, setSelectedIssue] = useState([]);
 	const issuesCollectionRef = collection(db, "issues");
+	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market, id } = selectedIssue;
 
 	useEffect(() => {
 		(async () => {
 			const data = await getDocs(issuesCollectionRef);
-			setIssues(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+			const objectData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+			objectData.filter((val) => {
+				if (props.issueTerm === "") {
+					setIssues(objectData);
+				} else if (val.title.toLowerCase().includes(props.issueTerm.toLowerCase())) {
+					setIssues(objectData.filter((val) => val.title.toLowerCase().includes(props.issueTerm.toLowerCase())));
+				}
+			});
 		})();
-	}, []);
+	}, [props.issueTerm]);
 
 	const onDelete = (id) => {
 		if (window.confirm("Are you sure you want to delete this issue?")) {
 			deleteDoc(doc(issuesCollectionRef, id));
 			setIssues(issues.filter((issue) => issue.id !== id));
 		}
+	};
+
+	const onPopup = (id) => {
+		setSelectedIssue(...issues.filter((doc) => doc.id === id));
 	};
 
 	return (
@@ -61,15 +74,36 @@ function Home() {
 									<button className="btn btn-delete" onClick={() => onDelete(issue.id)}>
 										Delete
 									</button>
-									<Link to={`/view/${issue.id}`}>
-										<button className="btn btn-view">View</button>
-									</Link>
+									<button className="btn btn-view" onClick={() => onPopup(issue.id)}>
+										View
+									</button>
 								</td>
 							</tr>
 						);
 					})}
 				</tbody>
 			</table>
+			<div style={{ marginTop: "150px" }}>
+				<div className="card">
+					<div className="card-header">
+						<p>Issue Details</p>
+					</div>
+					<div className="container">
+						<strong>ID:</strong>
+						<span>{id || ""}</span>
+						<br />
+						<br />
+						<strong>title:</strong>
+						<span>{title || ""}</span>
+						<br />
+						<br />
+						<strong>Webmaster:</strong>
+						<span>{webmasterName || ""}</span>
+						<br />
+						<br />
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }
