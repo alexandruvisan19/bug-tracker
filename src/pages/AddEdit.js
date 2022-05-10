@@ -4,11 +4,13 @@ import "./AddEdit.css";
 import db from "../firebase";
 import { collection, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
+import RichTextEditor from "../components/RichTextEditor";
 
 const initialState = {
 	title: null,
 	issueDescription: null,
 	solvedDescription: null,
+	test: null,
 	webmasterName: null,
 	market: null,
 	date: null,
@@ -19,7 +21,7 @@ export default function AddEdit() {
 	const [state, setState] = useState(initialState);
 	const [issues, setData] = useState([]);
 	const issueCollectionRef = collection(db, "issues");
-	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market } = state;
+	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market, test } = state;
 	const { id } = useParams();
 
 	useEffect(() => {

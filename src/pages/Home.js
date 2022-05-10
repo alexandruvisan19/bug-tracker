@@ -9,8 +9,6 @@ function Home(props) {
 	const [selectedIssue, setSelectedIssue] = useState([]);
 	const issuesCollectionRef = collection(db, "issues");
 	const [order, setOrder] = useState("ASC");
-	const [showModal, setShowModal] = useState(false);
-	const { title, issueDescription, solvedDescription, webmasterName, date, tagName, market, id } = selectedIssue;
 
 	const openModal = (id) => {
 		setSelectedIssue(...issues.filter((doc) => doc.id === id));
@@ -51,7 +49,6 @@ function Home(props) {
 			setOrder("ASC");
 		}
 	};
-
 	return (
 		<div>
 			<table className="styled-table">
